@@ -17,34 +17,16 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-    // Show the Admin Dashboard
     @GetMapping("/dashboard")
     public String adminDashboard(Model model) {
         List<User> allUsers = userService.getAllUsers();
-        model.addAttribute("users", allUsers); // Pass all users to the dashboard
-        return "adminDashboard"; // Points to admin-dashboard.html
+        model.addAttribute("users", allUsers);
+        return "adminDashboard";
     }
 
-    // Show user management page
-//    @GetMapping("/manage-users")
-//    public String manageUsers(Model model) {
-//        List<User> allUsers = userService.getAllUsers();
-//        model.addAttribute("users", allUsers);
-//        return "manage-users"; // Points to manage-users.html
-//    }
-
-    // Delete a user by ID
-//    @PostMapping("/delete-user")
-//    public String deleteUser(@RequestParam Long userId, Model model) {
-//        userService.deleteUserById(userId);
-//        model.addAttribute("successMessage", "User deleted successfully.");
-//        return "redirect:/admin/manage-users"; // Redirect back to manage-users page
-//    }
-
-    // Add a new user (Admin-only)
     @GetMapping("/add-user")
     public String showAddUserForm() {
-        return "add-user"; // Points to add-user.html
+        return "register";
     }
 
     @PostMapping("/add-user")
@@ -60,10 +42,10 @@ public class AdminController {
             user.setRoles(Set.of(roles));
             userService.registerUser(user);
             model.addAttribute("successMessage", "User added successfully!");
-            return "redirect:/admin/manage-users"; // Redirect to manage-users after successful addition
+            return "redirect:/admin/dashboard";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Failed to add user. Username might already exist.");
-            return "add-user"; // Stay on the add-user page with error
+            return "register";
         }
     }
 }

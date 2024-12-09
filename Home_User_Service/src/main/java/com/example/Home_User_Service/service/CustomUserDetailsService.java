@@ -11,41 +11,22 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
 @Service
-public class UserService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
-
-    public User registerUser(User user) {
-        return userRepository.save(user);
-    }
-
-    public boolean authenticateUser(String username, String rawPassword) {
-        return userRepository.findByUsername(username)
-                .map(user -> user.getPassword().equals(rawPassword)) // Match plain-text passwords
-                .orElse(false);
-    }
-
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public void deleteUserById(Long userId) {
-        userRepository.deleteById(userId);
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-        // Map roles to GrantedAuthority
+        System.out.println("Loaded user: " + user.getUsername() + ", Roles: " + user.getRoles());
+
         List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(SimpleGrantedAuthority::new)
+                .map(role -> new SimpleGrantedAuthority(role.toUpperCase()))
                 .collect(Collectors.toList());
 
         return new org.springframework.security.core.userdetails.User(
@@ -54,4 +35,5 @@ public class UserService implements UserDetailsService {
                 authorities
         );
     }
+
 }

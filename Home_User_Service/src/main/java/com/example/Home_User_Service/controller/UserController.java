@@ -1,8 +1,9 @@
 package com.example.Home_User_Service.controller;
 
-import com.example.Home_User_Service.model.User;
 import com.example.Home_User_Service.service.UserService;
+import com.example.Home_User_Service.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +17,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // Show the registration page
     @GetMapping("/register")
     public String showRegistrationPage() {
-        return "register"; // Points to register.html in templates
+        return "register";
     }
 
-    // Handle user registration
     @PostMapping("/register")
     public String registerUser(
             @RequestParam String username,
@@ -30,25 +29,32 @@ public class UserController {
             @RequestParam("roles") String[] roles,
             Model model) {
         try {
-            User user = new User();
-            user.setUsername(username);
-            user.setPassword(password); // Store plain-text password
-            user.setRoles(Set.of(roles)); // Convert roles array to Set
-            userService.registerUser(user);
+            userService.registerUser(new User(null, username, password, Set.of(roles)));
             model.addAttribute("successMessage", "Registration successful!");
-            return "redirect:/users/login"; // Redirect to login page after registration
+            return "redirect:/users/login";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "User already exists.");
-            return "register"; // Stay on the registration page with error
+            return "register";
         }
     }
 
-    // Show the login page
     @GetMapping("/login")
     public String showLoginPage(@RequestParam(value = "error", required = false) String error, Model model) {
         if (error != null) {
             model.addAttribute("errorMessage", "Invalid username or password.");
         }
-        return "login"; // Points to login.html in templates
+        return "login";
     }
+
+    @GetMapping("/dashboard")
+    public String userDashboard(Model model) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("Accessing dashboard for user: " + username);
+        model.addAttribute("username", username);
+        return "userDashboard";
+    }
+
 }
+
+
+

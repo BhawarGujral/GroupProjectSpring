@@ -1,35 +1,170 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-  <link rel="stylesheet" href="/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Device Management</title>
+  <link rel="stylesheet" href="/device.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-<header>Smart Home Automation - Devices</header>
+<header>
+  <div class="logo">
+    <h1>Smart Home Automation - Device Management</h1>
+  </div>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/users/logout">Logout</a>
+  </nav>
+</header>
+
 <div class="container">
-  <h1>Your Devices</h1>
-  <table>
-    <thead>
-    <tr>
-      <th>Device Name</th>
-      <th>Status</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Example devices (replace with dynamic content) -->
-    <tr>
-      <td>Living Room Light</td>
-      <td>On</td>
-      <td><button>Toggle</button></td>
-    </tr>
-    <tr>
-      <td>Thermostat</td>
-      <td>22°C</td>
-      <td><button>Adjust</button></td>
-    </tr>
-    </tbody>
-  </table>
+  <h1>Device Management</h1>
+
+  <!-- Add Device Form -->
+  <section>
+    <h2>Add New Device</h2>
+    <form id="addDeviceForm">
+      <label for="deviceName">Device Name:</label>
+      <input type="text" id="deviceName" required>
+
+      <label for="deviceStatus">Device Status:</label>
+      <input type="text" id="deviceStatus" placeholder="ON or OFF" required>
+
+      <button type="submit" class="btn-primary">Add Device</button>
+    </form>
+  </section>
+
+  <!-- View My Devices -->
+  <section>
+    <h2>My Devices</h2>
+    <button onclick="fetchMyDevices()" class="btn-secondary">Load My Devices</button>
+    <ul id="myDevicesList"></ul>
+  </section>
+
+  <!-- View All Devices (Admin) -->
+  <section>
+    <h2>All Devices (Admin View)</h2>
+    <button onclick="fetchAllDevices()" class="btn-secondary">Load All Devices</button>
+    <ul id="allDevicesList"></ul>
+  </section>
+
+  <!-- Update Device Status -->
+  <section>
+    <h2>Update Device Status</h2>
+    <form id="updateStatusForm">
+      <label for="deviceId">Device ID:</label>
+      <input type="number" id="deviceId" required>
+
+      <label for="newStatus">New Status:</label>
+      <input type="text" id="newStatus" placeholder="ON or OFF" required>
+
+      <button type="submit" class="btn-primary">Update Status</button>
+    </form>
+  </section>
+
+  <!-- Delete Device -->
+  <section>
+    <h2>Delete Device</h2>
+    <form id="deleteDeviceForm">
+      <label for="deleteDeviceId">Device ID:</label>
+      <input type="number" id="deleteDeviceId" required>
+
+      <button type="submit" class="btn-danger">Delete Device</button>
+    </form>
+  </section>
 </div>
+
+<footer>
+  <p>&copy; 2024 Smart Home Automation. All rights reserved.</p>
+</footer>
+
+<script>
+  const apiUrl = "/devices";
+
+  // Add Device
+  document.getElementById('addDeviceForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const deviceName = document.getElementById('deviceName').value;
+      const deviceStatus = document.getElementById('deviceStatus').value;
+
+      try {
+          const response = await axios.post(`${apiUrl}/add`, {
+              name: deviceName,
+              status: deviceStatus
+          });
+          alert(`Device added: ${response.data.name}`);
+          document.getElementById('addDeviceForm').reset();
+      } catch (error) {
+          console.error(error);
+          alert('Error adding device.');
+      }
+  });
+
+  // Fetch My Devices
+  async function fetchMyDevices() {
+      try {
+          const response = await axios.get(`${apiUrl}/my-devices`);
+          const myDevicesList = document.getElementById('myDevicesList');
+          myDevicesList.innerHTML = '';
+          response.data.forEach(device => {
+              const li = document.createElement('li');
+              li.textContent = `ID: ${device.id}, Name: ${device.name}, Status: ${device.status}, Owner: ${device.owner}`;
+              myDevicesList.appendChild(li);
+          });
+      } catch (error) {
+          console.error(error);
+          alert('Error fetching devices.');
+      }
+  }
+
+  // Fetch All Devices
+  async function fetchAllDevices() {
+      try {
+          const response = await axios.get(`${apiUrl}/all`);
+          const allDevicesList = document.getElementById('allDevicesList');
+          allDevicesList.innerHTML = '';
+          response.data.forEach(device => {
+              const li = document.createElement('li');
+              li.textContent = `ID: ${device.id}, Name: ${device.name}, Status: ${device.status}, Owner: ${device.owner}`;
+              allDevicesList.appendChild(li);
+          });
+      } catch (error) {
+          console.error(error);
+          alert('Error fetching devices.');
+      }
+  }
+
+  // Update Device Status
+  document.getElementById('updateStatusForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const deviceId = document.getElementById('deviceId').value;
+      const newStatus = document.getElementById('newStatus').value;
+
+      try {
+          await axios.put(`${apiUrl}/update-status/${deviceId}?status=${newStatus}`);
+          alert(`Device status updated to ${newStatus}`);
+          document.getElementById('updateStatusForm').reset();
+      } catch (error) {
+          console.error(error);
+          alert('Error updating device status.');
+      }
+  });
+
+  // Delete Device
+  document.getElementById('deleteDeviceForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const deviceId = document.getElementById('deleteDeviceId').value;
+
+      try {
+          await axios.delete(`${apiUrl}/delete/${deviceId}`);
+          alert(`Device with ID ${deviceId} deleted.`);
+          document.getElementById('deleteDeviceForm').reset();
+      } catch (error) {
+          console.error(error);
+          alert('Error deleting device.');
+      }
+  });
+</script>
 </body>
 </html>

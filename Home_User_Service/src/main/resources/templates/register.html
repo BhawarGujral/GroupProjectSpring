@@ -1,31 +1,56 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles.css">
-    <title>User Registration</title>
+    <title>Register - Smart Home Automation</title>
 </head>
 <body>
-<header>Smart Home Automation - Register</header>
-<div class="container">
-    <h1>Register</h1>
-    <form th:action="@{/users/register}" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-
-        <label>Select Role:</label>
-        <div>
-            <input type="radio" id="user" name="roles" value="USER" required>
-            <label for="user">User</label>
-            <input type="radio" id="admin" name="roles" value="ADMIN" required>
-            <label for="admin">Admin</label>
+<div class="wrapper">
+    <header>
+        <div class="logo">
+            <h1>Smart Home Automation</h1>
         </div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/users/login">Login</a>
+        </nav>
+    </header>
 
-        <button type="submit">Register</button>
-    </form>
-    <p th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></p>
+    <div class="form-container">
+        <h1>Register</h1>
+        <form th:action="@{/users/register}" method="post">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label>Select Role:</label>
+                <div class="role-options">
+                    <input type="radio" id="user" name="roles" value="USER" required>
+                    <label for="user">User</label>
+                    <input type="radio" id="admin" name="roles" value="ADMIN" required>
+                    <label for="admin">Admin</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary">Register</button>
+        </form>
+
+        <p th:if="${errorMessage}" th:text="${errorMessage}" class="error-message"></p>
+        <p th:if="${successMessage}" th:text="${successMessage}" class="success-message"></p>
+    </div>
 </div>
+
+<footer>
+    <p>&copy; 2024 Smart Home Automation. All rights reserved.</p>
+</footer>
 </body>
 </html>
