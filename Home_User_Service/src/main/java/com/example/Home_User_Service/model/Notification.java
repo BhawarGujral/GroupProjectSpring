@@ -1,8 +1,5 @@
 package com.example.Home_User_Service.model;
 
-<<<<<<< Updated upstream
-public class Notification {
-=======
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -24,8 +21,13 @@ public class Notification {
 
     @Column(nullable = false)
     private boolean isRead = false; // Whether the notification has been read
+//
+//    @Column(nullable = false)
+//    private String deviceName; // Name of the device
+//
+//    @Column(nullable = false)
+//    private String status; // Status of the device (e.g., ON, OFF)
 
     @Column(nullable = false)
     private LocalDateTime timestamp = LocalDateTime.now(); // When the notification was created
->>>>>>> Stashed changes
 }

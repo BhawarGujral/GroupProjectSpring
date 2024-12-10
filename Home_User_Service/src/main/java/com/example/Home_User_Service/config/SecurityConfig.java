@@ -13,14 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-<<<<<<< Updated upstream
-import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-
-import java.util.Properties;
-=======
->>>>>>> Stashed changes
 
 @Configuration
 public class SecurityConfig {
@@ -36,24 +28,14 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/", "/users/register", "/users/login", "/styles.css", "/smarthome.jpg").permitAll()
-<<<<<<< Updated upstream
-                .requestMatchers("/admin/**").hasAuthority("ADMIN") // Match exactly "ADMIN" from DB
-                .requestMatchers("/user/**").hasAuthority("USER")   // Match exactly "USER" from DB
-                .anyRequest().authenticated()
-=======
                 .requestMatchers("/admin/**").hasAuthority("ADMIN") // Only accessible by ADMIN
                 .requestMatchers("/user/**", "/devices/**").hasAnyAuthority("USER", "ADMIN") // Shared resources
                 .anyRequest().authenticated() // Other requests require authentication
->>>>>>> Stashed changes
                 .and()
                 .formLogin()
                 .loginPage("/users/login")
                 .loginProcessingUrl("/login")
-<<<<<<< Updated upstream
-                .successHandler(customAuthenticationSuccessHandler()) // Add custom handler
-=======
                 .successHandler(customAuthenticationSuccessHandler())
->>>>>>> Stashed changes
                 .failureUrl("/users/login?error=true")
                 .permitAll()
                 .and()
@@ -64,25 +46,6 @@ public class SecurityConfig {
     }
 
     @Bean
-<<<<<<< Updated upstream
-    public JavaMailSender javaMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-        mailSender.setUsername("");
-        mailSender.setPassword("");
-
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-
-        return mailSender;
-    }
-
-    @Bean
-=======
->>>>>>> Stashed changes
     public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
         return (request, response, authentication) -> {
             String redirectUrl = "/users/dashboard"; // Default redirection
@@ -108,7 +71,6 @@ public class SecurityConfig {
                 .and()
                 .build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {

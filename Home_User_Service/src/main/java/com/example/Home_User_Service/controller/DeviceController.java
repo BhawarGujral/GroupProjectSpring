@@ -3,15 +3,11 @@ package com.example.Home_User_Service.controller;
 import com.example.Home_User_Service.model.Device;
 import com.example.Home_User_Service.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
-<<<<<<< Updated upstream
-=======
 import org.springframework.http.ResponseEntity;
->>>>>>> Stashed changes
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
 import java.util.List;
 
 @Controller
@@ -21,28 +17,28 @@ public class DeviceController {
     @Autowired
     private DeviceService deviceService;
 
-    // Default mapping for /devices - Redirect to device management page
+    // Redirect to device management page
     @GetMapping
     public String defaultMapping() {
-        return "redirect:/devices/device-management"; // Redirect to /devices/device-management
+        return "redirect:/devices/device-management";
     }
 
-    // Mapping for device management HTML page
+    // Show device management page
     @GetMapping("/device-management")
     public String showDeviceManagementPage() {
-        return "DeviceManagement"; // HTML file located in src/main/resources/templates
+        return "DeviceManagement";
     }
 
-    // REST API: Add a new device
+    // Add a new device
     @PostMapping("/add")
     @ResponseBody
     public Device addDevice(@RequestBody Device device) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        device.setOwner(username); // Set the owner as the logged-in user
+        device.setOwner(username); // Set logged-in user as the owner
         return deviceService.addDevice(device);
     }
 
-    // REST API: Get devices owned by the logged-in user
+    // Get devices owned by the logged-in user
     @GetMapping("/my-devices")
     @ResponseBody
     public List<Device> getMyDevices() {
@@ -50,42 +46,29 @@ public class DeviceController {
         return deviceService.getDevicesByOwner(username);
     }
 
-    // REST API: Get all devices
+    // Get all devices (Admin use case)
     @GetMapping("/all")
     @ResponseBody
     public List<Device> getAllDevices() {
         return deviceService.getAllDevices();
     }
 
-    // REST API: Update the status of a device
+    // Update the status of a device
     @PutMapping("/update-status/{id}")
-<<<<<<< Updated upstream
-    @ResponseBody
-    public String updateDeviceStatus(@PathVariable Long id, @RequestParam String status) throws MessagingException {
-        deviceService.updateDeviceStatus(id, status);
-        return "Device status updated and notification sent.";
-
-    }
-
-    // REST API: Delete a device
-    @DeleteMapping("/delete/{id}")
-    @ResponseBody
-    public String deleteDevice(@PathVariable Long id) throws MessagingException {
-        deviceService.deleteDevice(id);
-        return "Device deleted and notification sent.";
-
-=======
     public ResponseEntity<Void> updateDeviceStatus(
             @PathVariable Long id,
             @RequestParam("status") String status) {
+        if (status == null || status.trim().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
         deviceService.updateDeviceStatus(id, status);
         return ResponseEntity.ok().build();
     }
 
+    // Delete a device
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteDevice(@PathVariable Long id) {
         deviceService.deleteDevice(id);
         return ResponseEntity.noContent().build();
->>>>>>> Stashed changes
     }
 }

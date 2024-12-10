@@ -3,75 +3,74 @@
 <head>
   <title>Notifications</title>
   <link rel="stylesheet" href="/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #f7f9fc;
       margin: 0;
       padding: 0;
-      background-color: #f7f9fc;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
     }
 
     header {
       background-color: #35424a;
       color: white;
-      padding: 20px 20px;
+      padding: 15px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    header span {
       font-size: 1.5rem;
-      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
+      font-weight: bold;
     }
 
     header nav {
-      position: absolute;
-      right: 40px;
-      top: 10px;
+      display: flex;
+      gap: 10px;
     }
 
     header nav .button {
-      background-color: #555;
+      background-color: #007bff;
       color: white;
-      padding: 10px 20px;
+      padding: 10px 15px;
+      border: none;
       border-radius: 5px;
       text-decoration: none;
       font-size: 1rem;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      cursor: pointer;
     }
 
     header nav .button:hover {
-      background-color: #333;
-      transform: scale(1.05);
+      background-color: #0056b3;
     }
 
     .container {
       max-width: 800px;
-      margin: 140px auto; /* Avoid overlap with header */
+      margin: 50px auto;
       padding: 20px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
+      text-align: center;
       color: #35424a;
       margin-bottom: 20px;
-      text-align: center;
+    }
+
+    #notificationsList {
+      list-style: none;
+      padding: 0;
     }
 
     .notification-item {
-      padding: 15px;
-      margin: 10px 0;
+      background-color: white;
       border: 1px solid #ddd;
       border-radius: 5px;
-      background-color: white;
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 15px 20px;
+      margin: 10px 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       position: relative;
     }
 
@@ -79,37 +78,59 @@
       background-color: #e0e0e0;
     }
 
-    .timestamp {
-      font-size: 0.8rem;
-      color: #555;
+    .notification-item .timestamp {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 5px;
     }
 
-    .mark-as-read {
+    .notification-item .buttons {
       position: absolute;
-      right: 15px;
       top: 15px;
-      background-color: #e8491d;
-      color: white;
-      border: none;
+      right: 20px;
+      display: flex;
+      gap: 5px;
+    }
+
+    .notification-item .buttons button {
       padding: 5px 10px;
-      border-radius: 3px;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
-      font-size: 0.9rem;
     }
 
-    .mark-as-read:hover {
-      background-color: #d73814;
-    }
-
-    footer {
-      text-align: center;
-      background-color: #35424a;
+    .notification-item .buttons .mark-read {
+      background-color: #28a745;
       color: white;
-      padding: 10px 0;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      font-size: 0.9rem;
+    }
+
+    .notification-item .buttons .mark-read:hover {
+      background-color: #218838;
+    }
+
+    .notification-item .buttons .delete {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .notification-item .buttons .delete:hover {
+      background-color: #c82333;
+    }
+
+    .device-name {
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .device-status-on {
+      color: green;
+      font-weight: bold;
+    }
+
+    .device-status-off {
+      color: red;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -124,54 +145,69 @@
 
 <div class="container">
   <h1>Your Notifications</h1>
-  <div id="notificationsList">
-    <!-- Notifications will be dynamically loaded here -->
-  </div>
+  <ul id="notificationsList">
+    <!-- Notifications will load dynamically here -->
+  </ul>
 </div>
-
-<footer>
-  <p>&copy; 2024 Smart Home Automation. All rights reserved.</p>
-</footer>
 
 <script>
   async function loadNotifications() {
-    const response = await fetch('/api/notifications');
-    const notifications = await response.json();
+    try {
+      const response = await axios.get('/api/notifications');
+      const list = document.getElementById('notificationsList');
+      list.innerHTML = '';
 
-    const list = document.getElementById('notificationsList');
-    list.innerHTML = ''; // Clear existing notifications
-
-    if (notifications.length === 0) {
-      list.innerHTML = '<p>You have no notifications.</p>';
-      return;
+      if (response.data.length === 0) {
+        const noNotification = document.createElement('li');
+        noNotification.className = 'notification-item';
+        noNotification.textContent = 'No notifications available.';
+        list.appendChild(noNotification);
+      } else {
+        response.data.forEach(notification => {
+          const item = document.createElement('li');
+          item.className = `notification-item ${notification.read ? 'read' : ''}`;
+          item.innerHTML = `
+            <div>
+<!--              <span class="device-name">${notification.deviceName || 'Unknown Device'}</span>-->
+<!--              <span class="${notification.status === 'ON' ? 'device-status-on' : 'device-status-off'}">-->
+<!--                ${notification.status}-->
+<!--              </span>-->
+              <p>${notification.message}</p>
+              <div class="timestamp">Created: ${new Date(notification.timestamp).toLocaleString()}</div>
+            </div>
+            <div class="buttons">
+              ${!notification.read ? `<button class="mark-read" onclick="markAsRead(${notification.id}, this)">Mark as Read</button>` : ''}
+              <button class="delete" onclick="deleteNotification(${notification.id}, this)">Delete</button>
+            </div>
+          `;
+          list.appendChild(item);
+        });
+      }
+    } catch (error) {
+      alert('Error loading notifications.');
     }
-
-    notifications.forEach(notification => {
-      const item = document.createElement('div');
-      item.className = `notification-item ${notification.read ? 'read' : ''}`;
-
-      item.innerHTML = `
-        <p>${notification.message}</p>
-        <div class="timestamp">Created: ${new Date(notification.timestamp).toLocaleString()}</div>
-        <button class="mark-as-read" onclick="markAsRead(${notification.id}, this)">Mark as Read</button>
-      `;
-
-      list.appendChild(item);
-    });
   }
 
   async function markAsRead(id, button) {
     try {
-      await fetch(`/api/notifications/${id}/mark-as-read`, { method: 'POST' });
-      button.parentElement.classList.add('read'); // Mark visually as read
-      button.remove(); // Remove the "Mark as Read" button
+      await axios.post(`/api/notifications/${id}/mark-as-read`);
+      button.parentElement.parentElement.classList.add('read');
+      button.remove();
     } catch (error) {
-      alert('Error marking notification as read');
+      alert('Error marking as read.');
     }
   }
 
-  // Load notifications on page load
-  document.addEventListener('DOMContentLoaded', loadNotifications);
+  async function deleteNotification(id, button) {
+    try {
+      await axios.post(`/api/notifications/${id}/delete`);
+      button.parentElement.parentElement.remove();
+    } catch (error) {
+      alert('Error deleting notification.');
+    }
+  }
+
+  loadNotifications();
 </script>
 </body>
 </html>

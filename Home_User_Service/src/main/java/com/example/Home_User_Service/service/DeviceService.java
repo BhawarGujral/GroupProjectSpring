@@ -18,74 +18,75 @@ public class DeviceService {
     @Autowired
     private NotificationService notificationService;
 
-    // Add a new device
+    // Add a new device and notify the user
     public Device addDevice(Device device) {
-        return deviceRepository.save(device);
+        Device savedDevice = deviceRepository.save(device);
+        notificationService.createNotification(
+                "Device '" + savedDevice.getName() + "' has been added.",
+                savedDevice.getOwner()
+        );
+        return savedDevice;
     }
 
-    // Get devices by the owner's name
+    // Get devices owned by a specific user
     public List<Device> getDevicesByOwner(String owner) {
         return deviceRepository.findByOwner(owner);
     }
 
-    // Get all devices
+    // Get all devices (Admin use case)
     public List<Device> getAllDevices() {
         return deviceRepository.findAll();
     }
 
-<<<<<<< Updated upstream
-    // Update device status and send alert
-    public void updateDeviceStatus(Long id, String status) throws MessagingException {
-=======
+    // Update device status and notify the user
     public void updateDeviceStatus(Long id, String status) {
-        if (status == null || status.isBlank()) {
-            throw new IllegalArgumentException("Status cannot be null or blank.");
-        }
-
->>>>>>> Stashed changes
         Device device = deviceRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Device not found with id: " + id));
+
         device.setStatus(status);
         deviceRepository.save(device);
-<<<<<<< Updated upstream
-      //  notificationService.sendDeviceStatusAlert(device.getName(), status);
+
+        notificationService.createNotification(
+                "Device '" + device.getName() + "' has been updated to status: " + status,
+                device.getOwner()
+        );
     }
 
-    // Delete a device and send error notification
-    public void deleteDevice(Long id) throws MessagingException {
-        deviceRepository.deleteById(id);
-        //notificationService.sendErrorNotification("Device with ID " + id + " has been deleted.");
-=======
-
-        System.out.println("Device updated: " + device.getName() + " -> " + status);
-    }
-
-    // Delete device
+    // Delete a device and notify the user
     public void deleteDevice(Long id) {
-        deviceRepository.deleteById(id);
-        System.out.println("Device with ID " + id + " has been deleted.");
->>>>>>> Stashed changes
+        Device device = deviceRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Device not found with id: " + id));
+
+        deviceRepository.delete(device);
+        notificationService.createNotification(
+                "Device '" + device.getName() + "' has been deleted.",
+                device.getOwner()
+        );
     }
 
     // Scheduled task to turn off devices at 11 PM every night
-   // @Scheduled(cron = "0 0 23 * * ?") // Cron expression to run at 11 PM every day
-    @Scheduled(cron = "0 * * * * ?") // This will run every minute
-
-    public void turnOffDevicesAtNight() throws MessagingException {
+    @Scheduled(cron = "0 0 23 * * ?") // Run at 11 PM daily
+    public void turnOffDevicesAtNight() {
         List<Device> devices = deviceRepository.findAll();
 
         for (Device device : devices) {
-            if ("ON".equals(device.getStatus())) { // Check if the device is currently ON
-                device.setStatus("OFF"); // Turn the device off
+            if ("ON".equalsIgnoreCase(device.getStatus())) {
+                device.setStatus("OFF");
                 deviceRepository.save(device);
-               // notificationService.sendDeviceStatusAlert(device.getName(), "OFF"); // Send alert that the device was turned off
-                System.out.println("Device " + device.getName() + " turned off at 11 PM.");
+                notificationService.createNotification(
+                        "Device '" + device.getName() + "' has been automatically turned OFF at 11 PM.",
+                        device.getOwner()
+                );
+                System.out.println("Device " + device.getName() + " turned OFF at 11 PM.");
             }
         }
     }
-<<<<<<< Updated upstream
-=======
 
+    // Optional: 5-second scheduler (Commented Out)
 
->>>>>>> Stashed changes
+//    @Scheduled(cron = "*/5 * * * * ?") // Run every 5 seconds (for testing)
+//    public void testScheduler() {
+//        System.out.println("Test scheduler executed at: " + System.currentTimeMillis());
+//    }
+
 }

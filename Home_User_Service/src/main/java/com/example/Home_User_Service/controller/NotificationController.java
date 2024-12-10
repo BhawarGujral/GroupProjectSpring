@@ -1,8 +1,5 @@
 package com.example.Home_User_Service.controller;
 
-<<<<<<< Updated upstream
-public class NotificationController {
-=======
 import com.example.Home_User_Service.model.Notification;
 import com.example.Home_User_Service.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,22 +24,22 @@ public class NotificationController {
         return "notifications";
     }
 
-    @ResponseBody // Returns JSON instead of rendering a view
+    @ResponseBody
     @GetMapping("/api/notifications")
     public List<Notification> getNotificationsForCurrentUser() {
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
         return notificationService.getNotificationsForUser(currentUser);
     }
 
-    @PostMapping("/{id}/mark-as-read")
+    @PostMapping("/api/notifications/{id}/mark-as-read")
+    @ResponseBody
     public void markAsRead(@PathVariable Long id) {
         notificationService.markAsRead(id);
     }
 
     @PostMapping("/api/notifications/{id}/delete")
+    @ResponseBody
     public void deleteNotification(@PathVariable Long id) {
         notificationService.deleteNotification(id);
     }
-
->>>>>>> Stashed changes
 }

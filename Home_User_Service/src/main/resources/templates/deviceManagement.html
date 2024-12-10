@@ -1,26 +1,9 @@
 <!DOCTYPE html>
-<<<<<<< Updated upstream
-<html lang="en">
-=======
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
->>>>>>> Stashed changes
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Device Management</title>
-<<<<<<< Updated upstream
-  <link rel="stylesheet" href="/device.css">
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</head>
-<body>
-<header>
-  <div class="logo">
-    <h1>Smart Home Automation - Device Management</h1>
-  </div>
-  <nav>
-    <a href="/">Home</a>
-    <a href="/users/logout">Logout</a>
-=======
   <link rel="stylesheet" href="/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
@@ -171,32 +154,20 @@
     <a href="/users/dashboard" sec:authorize="hasAuthority('USER')">User Dashboard</a>
     <a href="/admin/dashboard" sec:authorize="hasAuthority('ADMIN')">Admin Dashboard</a>
     <a href="/logout" class="button">Logout</a>
->>>>>>> Stashed changes
   </nav>
 </header>
 
 <div class="container">
   <h1>Device Management</h1>
 
-<<<<<<< Updated upstream
-=======
   <!-- Feedback Messages -->
   <div id="feedback" class="feedback"></div>
 
->>>>>>> Stashed changes
   <!-- Add Device Form -->
   <section>
     <h2>Add New Device</h2>
     <form id="addDeviceForm">
       <label for="deviceName">Device Name:</label>
-<<<<<<< Updated upstream
-      <input type="text" id="deviceName" required>
-
-      <label for="deviceStatus">Device Status:</label>
-      <input type="text" id="deviceStatus" placeholder="ON or OFF" required>
-
-      <button type="submit" class="btn-primary">Add Device</button>
-=======
       <input type="text" id="deviceName" placeholder="Enter device name" required>
 
       <label for="deviceStatus">Device Status:</label>
@@ -206,24 +177,12 @@
       </select>
 
       <button type="submit">Add Device</button>
->>>>>>> Stashed changes
     </form>
   </section>
 
   <!-- View My Devices -->
   <section>
     <h2>My Devices</h2>
-<<<<<<< Updated upstream
-    <button onclick="fetchMyDevices()" class="btn-secondary">Load My Devices</button>
-    <ul id="myDevicesList"></ul>
-  </section>
-
-  <!-- View All Devices (Admin) -->
-  <section>
-    <h2>All Devices (Admin View)</h2>
-    <button onclick="fetchAllDevices()" class="btn-secondary">Load All Devices</button>
-    <ul id="allDevicesList"></ul>
-=======
     <button onclick="fetchMyDevices()">Load My Devices</button>
     <table id="myDevicesTable">
       <thead>
@@ -254,7 +213,6 @@
       <tbody>
       </tbody>
     </table>
->>>>>>> Stashed changes
   </section>
 
   <!-- Update Device Status -->
@@ -262,14 +220,6 @@
     <h2>Update Device Status</h2>
     <form id="updateStatusForm">
       <label for="deviceId">Device ID:</label>
-<<<<<<< Updated upstream
-      <input type="number" id="deviceId" required>
-
-      <label for="newStatus">New Status:</label>
-      <input type="text" id="newStatus" placeholder="ON or OFF" required>
-
-      <button type="submit" class="btn-primary">Update Status</button>
-=======
       <input type="number" id="deviceId" placeholder="Enter device ID" required>
 
       <label for="newStatus">New Status:</label>
@@ -279,7 +229,6 @@
       </select>
 
       <button type="submit">Update Status</button>
->>>>>>> Stashed changes
     </form>
   </section>
 
@@ -288,11 +237,7 @@
     <h2>Delete Device</h2>
     <form id="deleteDeviceForm">
       <label for="deleteDeviceId">Device ID:</label>
-<<<<<<< Updated upstream
-      <input type="number" id="deleteDeviceId" required>
-=======
       <input type="number" id="deleteDeviceId" placeholder="Enter device ID" required>
->>>>>>> Stashed changes
 
       <button type="submit" class="btn-danger">Delete Device</button>
     </form>
@@ -306,90 +251,6 @@
 <script>
   const apiUrl = "/devices";
 
-<<<<<<< Updated upstream
-  // Add Device
-  document.getElementById('addDeviceForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const deviceName = document.getElementById('deviceName').value;
-      const deviceStatus = document.getElementById('deviceStatus').value;
-
-      try {
-          const response = await axios.post(`${apiUrl}/add`, {
-              name: deviceName,
-              status: deviceStatus
-          });
-          alert(`Device added: ${response.data.name}`);
-          document.getElementById('addDeviceForm').reset();
-      } catch (error) {
-          console.error(error);
-          alert('Error adding device.');
-      }
-  });
-
-  // Fetch My Devices
-  async function fetchMyDevices() {
-      try {
-          const response = await axios.get(`${apiUrl}/my-devices`);
-          const myDevicesList = document.getElementById('myDevicesList');
-          myDevicesList.innerHTML = '';
-          response.data.forEach(device => {
-              const li = document.createElement('li');
-              li.textContent = `ID: ${device.id}, Name: ${device.name}, Status: ${device.status}, Owner: ${device.owner}`;
-              myDevicesList.appendChild(li);
-          });
-      } catch (error) {
-          console.error(error);
-          alert('Error fetching devices.');
-      }
-  }
-
-  // Fetch All Devices
-  async function fetchAllDevices() {
-      try {
-          const response = await axios.get(`${apiUrl}/all`);
-          const allDevicesList = document.getElementById('allDevicesList');
-          allDevicesList.innerHTML = '';
-          response.data.forEach(device => {
-              const li = document.createElement('li');
-              li.textContent = `ID: ${device.id}, Name: ${device.name}, Status: ${device.status}, Owner: ${device.owner}`;
-              allDevicesList.appendChild(li);
-          });
-      } catch (error) {
-          console.error(error);
-          alert('Error fetching devices.');
-      }
-  }
-
-  // Update Device Status
-  document.getElementById('updateStatusForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const deviceId = document.getElementById('deviceId').value;
-      const newStatus = document.getElementById('newStatus').value;
-
-      try {
-          await axios.put(`${apiUrl}/update-status/${deviceId}?status=${newStatus}`);
-          alert(`Device status updated to ${newStatus}`);
-          document.getElementById('updateStatusForm').reset();
-      } catch (error) {
-          console.error(error);
-          alert('Error updating device status.');
-      }
-  });
-
-  // Delete Device
-  document.getElementById('deleteDeviceForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const deviceId = document.getElementById('deleteDeviceId').value;
-
-      try {
-          await axios.delete(`${apiUrl}/delete/${deviceId}`);
-          alert(`Device with ID ${deviceId} deleted.`);
-          document.getElementById('deleteDeviceForm').reset();
-      } catch (error) {
-          console.error(error);
-          alert('Error deleting device.');
-      }
-=======
   function showFeedback(message, isSuccess) {
     const feedback = document.getElementById('feedback');
     feedback.textContent = message;
@@ -456,7 +317,6 @@
     } catch {
       showFeedback('Error deleting device.', false);
     }
->>>>>>> Stashed changes
   });
 </script>
 </body>
