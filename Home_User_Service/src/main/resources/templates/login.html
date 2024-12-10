@@ -1,23 +1,162 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <link rel="stylesheet" href="/styles.css">
   <title>Login</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    /* Style Overrides for Login Page */
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #f9f9f9;
+        font-family: Arial, sans-serif;
+    }
+
+    header {
+        background-color: #35424a;
+        color: white;
+        padding: 20px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.5rem;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    header .home-button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    header .home-button:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    .form-container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 400px;
+        text-align: center;
+    }
+
+    .form-container h1 {
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+        color: #35424a;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .btn-primary {
+        width: 100%;
+        background-color: #e8491d;
+        color: white;
+        padding: 10px 0;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-primary:hover {
+        background-color: #d73814;
+    }
+
+    .register-redirect {
+        margin-top: 15px;
+        font-size: 0.9rem;
+    }
+
+    .register-redirect a {
+        color: #007BFF;
+        text-decoration: none;
+    }
+
+    .register-redirect a:hover {
+        text-decoration: underline;
+    }
+
+    footer {
+        text-align: center;
+        background-color: #35424a;
+        color: white;
+        padding: 10px 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        font-size: 0.9rem;
+    }
+  </style>
 </head>
 <body>
-<header>Smart Home Automation - Login</header>
-<div class="container">
+<header>
+  <h1>Smart Home Automation</h1>
+  <a href="/" class="home-button">Home</a>
+</header>
+
+<div class="form-container">
   <h1>Login</h1>
   <form th:action="@{/login}" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+    </div>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+    </div>
 
-    <button type="submit">Login</button>
+    <button type="submit" class="btn-primary">Login</button>
   </form>
+<<<<<<< Updated upstream
   <p th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></p>
+=======
+
+  <div class="register-redirect">
+    New user? <a href="/users/register">Register here</a>.
+  </div>
+>>>>>>> Stashed changes
 </div>
+
+<footer>
+  <p>&copy; 2024 Smart Home Automation. All rights reserved.</p>
+</footer>
 </body>
 </html>

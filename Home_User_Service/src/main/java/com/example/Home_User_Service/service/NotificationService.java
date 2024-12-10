@@ -1,5 +1,10 @@
 package com.example.Home_User_Service.service;
 
+<<<<<<< Updated upstream
+=======
+import com.example.Home_User_Service.model.Notification;
+import com.example.Home_User_Service.repository.NotificationRepository;
+>>>>>>> Stashed changes
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,11 +15,16 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+<<<<<<< Updated upstream
+=======
+import java.util.List;
+>>>>>>> Stashed changes
 
 @Service
 public class NotificationService {
 
     @Autowired
+<<<<<<< Updated upstream
     private JavaMailSender mailSender;
 
     private String notificationEmail = "admin@smarthome.com"; // Admin or system alert email address
@@ -43,3 +53,40 @@ public class NotificationService {
         mailSender.send(message);
     }
 }
+=======
+    private NotificationRepository notificationRepository;
+
+    // Create a notification
+    public Notification createNotification(String message, String recipient) {
+        Notification notification = new Notification();
+        notification.setMessage(message);
+        notification.setRecipient(recipient);
+        return notificationRepository.save(notification);
+    }
+
+    // Fetch notifications for a user
+    public List<Notification> getNotificationsForUser(String recipient) {
+        return notificationRepository.findByRecipient(recipient);
+    }
+
+    // Mark a notification as read
+    public void markNotificationAsRead(Long notificationId) {
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new IllegalArgumentException("Notification not found"));
+        notification.setRead(true);
+        notificationRepository.save(notification);
+    }
+    public void markAsRead(Long id) {
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Notification not found"));
+        notification.setRead(true);
+        notificationRepository.save(notification);
+    }
+    public void deleteNotification(Long notificationId) {
+        notificationRepository.deleteById(notificationId);
+    }
+
+
+}
+
+>>>>>>> Stashed changes

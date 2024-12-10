@@ -3,8 +3,127 @@
 <head>
     <link rel="stylesheet" href="/styles.css">
     <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f9fc;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background-color: #35424a;
+            color: white;
+            padding: 20px 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        header nav {
+            position: absolute;
+            right: 40px;
+            top: 10px;
+        }
+
+        header nav .button {
+            background-color: #555;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        header nav .button:hover {
+            background-color: #333;
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 100px auto; /* Adjusted margin to avoid overlapping with fixed header */
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container h1 {
+            color: #35424a;
+            margin-bottom: 20px;
+        }
+
+        .container p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .button {
+            background-color: #4caf50;;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-decoration: none;
+            margin: 10px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .image-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            background-color: #35424a;
+            color: white;
+            padding: 10px 0;
+            font-size: 0.9rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        main {
+            flex: 1; /* Ensures main content takes up available space */
+            overflow-y: auto; /* Enables scrolling for content */
+        }
+    </style>
 </head>
 <body>
+<<<<<<< Updated upstream
 <header>Smart Home Automation - Admin Dashboard</header>
 <div class="container">
     <h1>Welcome to Admin Dashboard</h1>
@@ -17,5 +136,33 @@
     </ul>
     <a href="/logout" style="color: red; font-weight: bold;">Logout</a>
 </div>
+=======
+<header>
+    <span style="margin-left: 20px;">Smart Home Automation - Admin Dashboard</span>
+    <nav>
+        <a href="/logout" class="button">Logout</a>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <h1>Welcome to Admin Dashboard</h1>
+        <p>As an admin, you can manage users, monitor devices, and oversee system operations.</p>
+
+        <div class="buttons">
+            <a href="/admin/add-user" class="button">Add User</a>
+            <a href="/devices" class="button">View All Devices</a>
+        </div>
+
+        <div class="image-container">
+            <img src="/admin1.jpg" alt="Admin Operations">
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 Smart Home Automation. All rights reserved.</p>
+</footer>
+>>>>>>> Stashed changes
 </body>
 </html>

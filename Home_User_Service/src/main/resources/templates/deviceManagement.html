@@ -1,9 +1,14 @@
 <!DOCTYPE html>
+<<<<<<< Updated upstream
 <html lang="en">
+=======
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+>>>>>>> Stashed changes
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Device Management</title>
+<<<<<<< Updated upstream
   <link rel="stylesheet" href="/device.css">
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
@@ -15,29 +20,200 @@
   <nav>
     <a href="/">Home</a>
     <a href="/users/logout">Logout</a>
+=======
+  <link rel="stylesheet" href="/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+
+    header {
+      background-color: #35424a;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    header nav {
+      display: flex;
+      gap: 10px;
+    }
+
+    header nav a {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    header nav a:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 1000px;
+      margin: 30px auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #35424a;
+    }
+
+    form, table {
+      margin: 20px auto;
+      max-width: 800px;
+    }
+
+    form label {
+      display: block;
+      font-weight: bold;
+      margin: 10px 0 5px;
+    }
+
+    form input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    button {
+      display: inline-block;
+      background-color: #35424a;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      background-color: #2a2f37;
+    }
+
+    .btn-danger {
+      background-color: #d9534f;
+    }
+
+    .btn-danger:hover {
+      background-color: #c9302c;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table th, table td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    table th {
+      background-color: #f4f4f9;
+    }
+
+    .feedback {
+      margin-top: 20px;
+      padding: 10px;
+      text-align: center;
+      border-radius: 5px;
+      display: none;
+    }
+
+    .feedback.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .feedback.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Smart Home Automation</h1>
+  </div>
+  <nav>
+    <a href="/users/dashboard" sec:authorize="hasAuthority('USER')">User Dashboard</a>
+    <a href="/admin/dashboard" sec:authorize="hasAuthority('ADMIN')">Admin Dashboard</a>
+    <a href="/logout" class="button">Logout</a>
+>>>>>>> Stashed changes
   </nav>
 </header>
 
 <div class="container">
   <h1>Device Management</h1>
 
+<<<<<<< Updated upstream
+=======
+  <!-- Feedback Messages -->
+  <div id="feedback" class="feedback"></div>
+
+>>>>>>> Stashed changes
   <!-- Add Device Form -->
   <section>
     <h2>Add New Device</h2>
     <form id="addDeviceForm">
       <label for="deviceName">Device Name:</label>
+<<<<<<< Updated upstream
       <input type="text" id="deviceName" required>
 
       <label for="deviceStatus">Device Status:</label>
       <input type="text" id="deviceStatus" placeholder="ON or OFF" required>
 
       <button type="submit" class="btn-primary">Add Device</button>
+=======
+      <input type="text" id="deviceName" placeholder="Enter device name" required>
+
+      <label for="deviceStatus">Device Status:</label>
+      <select id="deviceStatus">
+        <option value="ON">ON</option>
+        <option value="OFF">OFF</option>
+      </select>
+
+      <button type="submit">Add Device</button>
+>>>>>>> Stashed changes
     </form>
   </section>
 
   <!-- View My Devices -->
   <section>
     <h2>My Devices</h2>
+<<<<<<< Updated upstream
     <button onclick="fetchMyDevices()" class="btn-secondary">Load My Devices</button>
     <ul id="myDevicesList"></ul>
   </section>
@@ -47,6 +223,38 @@
     <h2>All Devices (Admin View)</h2>
     <button onclick="fetchAllDevices()" class="btn-secondary">Load All Devices</button>
     <ul id="allDevicesList"></ul>
+=======
+    <button onclick="fetchMyDevices()">Load My Devices</button>
+    <table id="myDevicesTable">
+      <thead>
+      <tr>
+        <th>Device ID</th>
+        <th>Name</th>
+        <th>Status</th>
+      </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Admin View Section -->
+  <section sec:authorize="hasAuthority('ADMIN')">
+    <h2>All Devices (Admin View)</h2>
+    <button onclick="fetchAllDevices()">Load All Devices</button>
+    <table id="allDevicesTable">
+      <thead>
+      <tr>
+        <th>Device ID</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Owner</th>
+      </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+>>>>>>> Stashed changes
   </section>
 
   <!-- Update Device Status -->
@@ -54,12 +262,24 @@
     <h2>Update Device Status</h2>
     <form id="updateStatusForm">
       <label for="deviceId">Device ID:</label>
+<<<<<<< Updated upstream
       <input type="number" id="deviceId" required>
 
       <label for="newStatus">New Status:</label>
       <input type="text" id="newStatus" placeholder="ON or OFF" required>
 
       <button type="submit" class="btn-primary">Update Status</button>
+=======
+      <input type="number" id="deviceId" placeholder="Enter device ID" required>
+
+      <label for="newStatus">New Status:</label>
+      <select id="newStatus">
+        <option value="ON">ON</option>
+        <option value="OFF">OFF</option>
+      </select>
+
+      <button type="submit">Update Status</button>
+>>>>>>> Stashed changes
     </form>
   </section>
 
@@ -68,7 +288,11 @@
     <h2>Delete Device</h2>
     <form id="deleteDeviceForm">
       <label for="deleteDeviceId">Device ID:</label>
+<<<<<<< Updated upstream
       <input type="number" id="deleteDeviceId" required>
+=======
+      <input type="number" id="deleteDeviceId" placeholder="Enter device ID" required>
+>>>>>>> Stashed changes
 
       <button type="submit" class="btn-danger">Delete Device</button>
     </form>
@@ -82,6 +306,7 @@
 <script>
   const apiUrl = "/devices";
 
+<<<<<<< Updated upstream
   // Add Device
   document.getElementById('addDeviceForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -164,6 +389,74 @@
           console.error(error);
           alert('Error deleting device.');
       }
+=======
+  function showFeedback(message, isSuccess) {
+    const feedback = document.getElementById('feedback');
+    feedback.textContent = message;
+    feedback.className = `feedback ${isSuccess ? 'success' : 'error'}`;
+    feedback.style.display = 'block';
+    setTimeout(() => feedback.style.display = 'none', 3000);
+  }
+
+  document.getElementById('addDeviceForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const deviceName = document.getElementById('deviceName').value;
+    const deviceStatus = document.getElementById('deviceStatus').value;
+    try {
+      await axios.post(`${apiUrl}/add`, { name: deviceName, status: deviceStatus });
+      showFeedback('Device added successfully.', true);
+      document.getElementById('addDeviceForm').reset();
+    } catch {
+      showFeedback('Error adding device.', false);
+    }
+  });
+
+  async function fetchMyDevices() {
+    try {
+      const response = await axios.get(`${apiUrl}/my-devices`);
+      const tbody = document.querySelector('#myDevicesTable tbody');
+      tbody.innerHTML = response.data.map(device =>
+        `<tr><td>${device.id}</td><td>${device.name}</td><td>${device.status}</td></tr>`).join('');
+    } catch {
+      showFeedback('Error fetching devices.', false);
+    }
+  }
+
+  async function fetchAllDevices() {
+    try {
+      const response = await axios.get(`${apiUrl}/all`);
+      const tbody = document.querySelector('#allDevicesTable tbody');
+      tbody.innerHTML = response.data.map(device =>
+        `<tr><td>${device.id}</td><td>${device.name}</td><td>${device.status}</td><td>${device.owner}</td></tr>`).join('');
+    } catch {
+      showFeedback('Error fetching all devices.', false);
+    }
+  }
+
+  document.getElementById('updateStatusForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const deviceId = document.getElementById('deviceId').value;
+    const newStatus = document.getElementById('newStatus').value;
+    try {
+      await axios.put(`${apiUrl}/update-status/${deviceId}?status=${newStatus}`);
+      showFeedback('Device status updated successfully.', true);
+      document.getElementById('updateStatusForm').reset();
+    } catch {
+      showFeedback('Error updating device status.', false);
+    }
+  });
+
+  document.getElementById('deleteDeviceForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const deviceId = document.getElementById('deleteDeviceId').value;
+    try {
+      await axios.delete(`${apiUrl}/delete/${deviceId}`);
+      showFeedback('Device deleted successfully.', true);
+      document.getElementById('deleteDeviceForm').reset();
+    } catch {
+      showFeedback('Error deleting device.', false);
+    }
+>>>>>>> Stashed changes
   });
 </script>
 </body>

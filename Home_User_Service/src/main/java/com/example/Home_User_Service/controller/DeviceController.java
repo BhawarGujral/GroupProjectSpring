@@ -3,6 +3,10 @@ package com.example.Home_User_Service.controller;
 import com.example.Home_User_Service.model.Device;
 import com.example.Home_User_Service.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< Updated upstream
+=======
+import org.springframework.http.ResponseEntity;
+>>>>>>> Stashed changes
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +59,7 @@ public class DeviceController {
 
     // REST API: Update the status of a device
     @PutMapping("/update-status/{id}")
+<<<<<<< Updated upstream
     @ResponseBody
     public String updateDeviceStatus(@PathVariable Long id, @RequestParam String status) throws MessagingException {
         deviceService.updateDeviceStatus(id, status);
@@ -69,5 +74,18 @@ public class DeviceController {
         deviceService.deleteDevice(id);
         return "Device deleted and notification sent.";
 
+=======
+    public ResponseEntity<Void> updateDeviceStatus(
+            @PathVariable Long id,
+            @RequestParam("status") String status) {
+        deviceService.updateDeviceStatus(id, status);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteDevice(@PathVariable Long id) {
+        deviceService.deleteDevice(id);
+        return ResponseEntity.noContent().build();
+>>>>>>> Stashed changes
     }
 }

@@ -33,12 +33,21 @@ public class DeviceService {
         return deviceRepository.findAll();
     }
 
+<<<<<<< Updated upstream
     // Update device status and send alert
     public void updateDeviceStatus(Long id, String status) throws MessagingException {
+=======
+    public void updateDeviceStatus(Long id, String status) {
+        if (status == null || status.isBlank()) {
+            throw new IllegalArgumentException("Status cannot be null or blank.");
+        }
+
+>>>>>>> Stashed changes
         Device device = deviceRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Device not found with id: " + id));
         device.setStatus(status);
         deviceRepository.save(device);
+<<<<<<< Updated upstream
       //  notificationService.sendDeviceStatusAlert(device.getName(), status);
     }
 
@@ -46,6 +55,16 @@ public class DeviceService {
     public void deleteDevice(Long id) throws MessagingException {
         deviceRepository.deleteById(id);
         //notificationService.sendErrorNotification("Device with ID " + id + " has been deleted.");
+=======
+
+        System.out.println("Device updated: " + device.getName() + " -> " + status);
+    }
+
+    // Delete device
+    public void deleteDevice(Long id) {
+        deviceRepository.deleteById(id);
+        System.out.println("Device with ID " + id + " has been deleted.");
+>>>>>>> Stashed changes
     }
 
     // Scheduled task to turn off devices at 11 PM every night
@@ -64,4 +83,9 @@ public class DeviceService {
             }
         }
     }
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
 }

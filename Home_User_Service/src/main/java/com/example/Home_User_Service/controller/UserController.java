@@ -51,6 +51,10 @@ public class UserController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println("Accessing dashboard for user: " + username);
         model.addAttribute("username", username);
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         return "userDashboard";
     }
 

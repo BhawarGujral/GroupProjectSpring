@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Notifications</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f9fc;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      background-color: #35424a;
+      color: white;
+      padding: 20px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.5rem;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    header nav {
+      position: absolute;
+      right: 40px;
+      top: 10px;
+    }
+
+    header nav .button {
+      background-color: #555;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    header nav .button:hover {
+      background-color: #333;
+      transform: scale(1.05);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 140px auto; /* Avoid overlap with header */
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #35424a;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .notification-item {
+      padding: 15px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: white;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .notification-item.read {
+      background-color: #e0e0e0;
+    }
+
+    .timestamp {
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    .mark-as-read {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background-color: #e8491d;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .mark-as-read:hover {
+      background-color: #d73814;
+    }
+
+    footer {
+      text-align: center;
+      background-color: #35424a;
+      color: white;
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <span>Smart Home Automation - Notifications</span>
+  <nav>
+    <a href="/users/dashboard" class="button">Dashboard</a>
+    <a href="/logout" class="button">Logout</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h1>Your Notifications</h1>
+  <div id="notificationsList">
+    <!-- Notifications will be dynamically loaded here -->
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2024 Smart Home Automation. All rights reserved.</p>
+</footer>
+
+<script>
+  async function loadNotifications() {
+    const response = await fetch('/api/notifications');
+    const notifications = await response.json();
+
+    const list = document.getElementById('notificationsList');
+    list.innerHTML = ''; // Clear existing notifications
+
+    if (notifications.length === 0) {
+      list.innerHTML = '<p>You have no notifications.</p>';
+      return;
+    }
+
+    notifications.forEach(notification => {
+      const item = document.createElement('div');
+      item.className = `notification-item ${notification.read ? 'read' : ''}`;
+
+      item.innerHTML = `
+        <p>${notification.message}</p>
+        <div class="timestamp">Created: ${new Date(notification.timestamp).toLocaleString()}</div>
+        <button class="mark-as-read" onclick="markAsRead(${notification.id}, this)">Mark as Read</button>
+      `;
+
+      list.appendChild(item);
+    });
+  }
+
+  async function markAsRead(id, button) {
+    try {
+      await fetch(`/api/notifications/${id}/mark-as-read`, { method: 'POST' });
+      button.parentElement.classList.add('read'); // Mark visually as read
+      button.remove(); // Remove the "Mark as Read" button
+    } catch (error) {
+      alert('Error marking notification as read');
+    }
+  }
+
+  // Load notifications on page load
+  document.addEventListener('DOMContentLoaded', loadNotifications);
+</script>
+</body>
+</html>
